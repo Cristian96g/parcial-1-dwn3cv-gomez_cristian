@@ -1,6 +1,6 @@
 import Vue from "vue";
 import Vuex from "vuex";
-import axios from "axios";
+// import axios from "axios";
 const API_BASE_URL = "https://api.themoviedb.org/3";
 
 Vue.use(Vuex);
@@ -47,18 +47,23 @@ export default new Vuex.Store({
      */
     async busquedaPelicula({ commit }, query) {
       try {
-        const response = await axios.get(`${API_BASE_URL}/search/tv`, {
-          params: {
-            language: "es",
-            query: query,
-          },
+        const response = await fetch(`${API_BASE_URL}/search/tv?language=es&query=${query}`, {
           headers: {
             Authorization:
               "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJkN2RkZjI5ZTMyZTNhMjlhZmNjNWE3ZjVlOWFiYTAyOCIsInN1YiI6IjYzZDQ4M2UyYzE1YjU1MDBmMGI2NjIxMCIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.7Nwulcov85apY1EEKx3R2x5X7pjwfNAX_6Zq8BVm_b0",
           },
+          // params: {
+          //   language: "es",
+          //   query: query,
+          // },
+          // headers: {
+          //   Authorization:
+          //     "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJkN2RkZjI5ZTMyZTNhMjlhZmNjNWE3ZjVlOWFiYTAyOCIsInN1YiI6IjYzZDQ4M2UyYzE1YjU1MDBmMGI2NjIxMCIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.7Nwulcov85apY1EEKx3R2x5X7pjwfNAX_6Zq8BVm_b0",
+          // },
         });
-        console.log(response.data);
-        const resultados = response.data.results;
+        console.log(response);
+        const data = await response.json();
+        const resultados = data.results;
         commit("setResultadoBusqueda", resultados);
       } catch (error) {
         console.error("Error searching peliculas:", error);
