@@ -1,27 +1,31 @@
 <template>
-  <div class="hero-area">
-    <div class="container">
-      <div class="row justify-content-center">
-        <div class="col-lg-6 justify-content-center text-center">
-          <div class="hero-caption">
-            <h1>Buscá Series y Películas</h1>
-            <p>Encuentra tus favoritas y descubre nuevas opciones.</p>
-            <div class="input-group mb-3">
-              <input type="text" v-model="textoBusqueda" @keyup.enter="buscar" class="form-control"
-                placeholder="Busca tu serie o pelicula" required>
-              <button class="btn-buscar" @click="buscar">Buscar</button>
-            </div>
-          </div>
+  <v-container fluid>
+    <v-row justify="center">
+      <v-col cols="12" sm="8" md="6" lg="4">
+        <div class="text-center">
+          <h1>Buscá Series y Películas</h1>
+          <p>Encuentra tus favoritas y descubre nuevas opciones.</p>
+          <v-col justify="center">
+              <v-card-title>
+                <v-text-field append-icon="mdi-magnify" label="Ingresa el nombre aca" single-line hide-details
+                  v-model="textoBusqueda" @keydown.enter="buscar"></v-text-field>
+              </v-card-title>
+          </v-col>
+          <v-row justify="center">
+            <v-col cols="auto">
+              <v-btn color="btn-buscar" @click="buscar">Buscar</v-btn>
+            </v-col>
+          </v-row>
         </div>
-      </div>
-      <div class="row">
-      <div v-for="pelicula in resultadoBusqueda" :key="pelicula.id" class="col-12 col-sm-6 col-md-4 col-lg-3" style="max-width: 400px;">
-          <PeliculaCard :pelicula="pelicula" @guardar-pelicula="peliculaGuardada"></PeliculaCard>
-      </div>
-    </div>
+      </v-col>
+    </v-row>
 
-    </div>
-  </div>
+    <v-row justify="center">
+      <v-col cols="12" sm="6" md="4" lg="3" v-for="pelicula in resultadoBusqueda" :key="pelicula.id">
+        <PeliculaCard :pelicula="pelicula" @guardar-pelicula="peliculaGuardada"></PeliculaCard>
+      </v-col>
+    </v-row>
+  </v-container>
 </template>
   
 <script>
@@ -80,16 +84,19 @@ body {
   padding: 0;
 }
 
-h1{
+h1 {
   color: #012E40;
 }
 
-.hero-caption p{
-  color:#026773;
+.hero-caption p {
+  color: #026773;
 }
 
 .btn-buscar {
   border-radius: 0 7px 7px 0;
   cursor: pointer;
 }
+
+
+
 </style>

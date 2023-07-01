@@ -1,22 +1,36 @@
 <template>
-  <div class="mt-5">
-    <div class="movie-card card mx-auto mb-3" :key="id">
-      <img :src="poster" class="card-img-top" />
-      <div class="card-body">
-        <h4 class="card-title font-weight-bold">{{ recotarTitulo() }}</h4>
-        <div class="card-text text-primary">
-          <div>{{ type }}</div>
-          <div class="pb-4 text-descripcion"> 
-            {{ recortarTexto() }} 
-          </div>
-        </div>
-        <div class="card-footer w-100">
-          <button :class="`btn btn-lg btn-${!estaGuardada ? 'añadir' : 'eliminar'}`" @click="peliculaGuardada">{{ buttonText }}</button>
-          <p v-if="confirmacion">{{ confirmacion }}</p>
-        </div>
-      </div>
+
+  <v-card class="mt-5 mx-auto mb-3">
+    <v-img :src="poster" class="card-img-top" />
+    <v-card-text class="text-primary">
+      <h4 class="card-title font-weight-bold">{{ recotarTitulo() }}</h4>
+      <div>{{ type }}</div>
+      <v-row class="pb-4">
+        <v-col class="text-descripcion">
+          {{ recortarTexto() }}
+        </v-col>
+      </v-row>
+    </v-card-text>
+    <v-card-actions class="d-flex justify-center">
+      <v-btn :class="`btn-lg btn-${!estaGuardada ? 'añadir' : 'eliminar'}`" @click="peliculaGuardada">{{ buttonText
+      }}</v-btn>
+    </v-card-actions>
+    <div class="text-center">
+      <v-alert dense color="red" type="success" 
+      v-if="!estaGuardada"
+      v-show="confirmacion"
+      >
+      {{ confirmacion }}
+    </v-alert>
+    <v-alert dense color="green" type="success"
+      v-else
+      v-show="confirmacion"
+    >
+      {{ confirmacion }}
+    </v-alert>
+      <!-- <p v-if="confirmacion">{{ confirmacion }}</p> -->
     </div>
-  </div>
+  </v-card>
 </template>
 
 <script>
@@ -48,6 +62,7 @@ export default {
        * Mensaje de error.
        * @member {string}
        */
+
       confirmacion: '',
       estaGuardada: false,
       textoRecortado: '',
@@ -67,9 +82,17 @@ export default {
 * @function
 * @returns {string} Imagen de la película.
 */
-    poster() {
 
-      let imagen = 'https://image.tmdb.org/t/p/original' + this.pelicula.poster_path;
+
+    poster() {
+      console.log(this.pelicula);
+      let imagen = '';
+      if (!this.pelicula.poster_path) {
+        console.log(this.pelicula.poster_path);
+        imagen = require('@/assets/sin-imagen.png');
+      } else {
+        imagen = 'https://image.tmdb.org/t/p/original' + this.pelicula.poster_path;
+      }
       return imagen;
     },
     /**
@@ -114,10 +137,10 @@ export default {
      * @function
      * @returns {string} Resumen de la película recortado.
      */
-    recortarTexto(){
+    recortarTexto() {
       let texto = this.pelicula.overview;
       let textoRecortado = texto.substring(0, 70);
-      if(texto.length > 20){
+      if (texto.length > 20) {
         textoRecortado += '...'
       }
       return textoRecortado;
@@ -127,10 +150,10 @@ export default {
      * @function
      * @returns {string} Título de la película recortado.
      */
-    recotarTitulo(){
+    recotarTitulo() {
       let titulo = this.pelicula.name;
       let tituloRecortado = titulo.substring(0, 20);
-      if(titulo.length > 20){
+      if (titulo.length > 20) {
         tituloRecortado += '...'
       }
       return tituloRecortado;
@@ -145,20 +168,22 @@ export default {
       const existePelicula = this.$store.state.resultGuardados.some(
         peliculaGuardada => peliculaGuardada.id === this.pelicula.id
       );
-      
+
       // Si la película no está guardada, la guarda
       if (!existePelicula) {
         this.$store.dispatch('peliculaGuardada', this.pelicula);
         this.estaGuardada = true;
         this.confirmacion = 'Guardado correctamente';
         console.log(this.estaGuardada);
-        setTimeout(() => {
-        this.confirmacion = '';
-      }, 3000);
+
       } else {
         this.$store.dispatch('eliminarPelicula', this.pelicula.id);
+        this.confirmacion = 'Eliminado correctamente';
         this.estaGuardada = false;
       }
+      setTimeout(() => {
+          this.confirmacion = '';
+        }, 3000);
     },
   },
   created() {
@@ -177,33 +202,36 @@ export default {
   background-color: transparent !important;
   border-top: none !important;
 }
-.card-title{
+
+.card-title {
   min-height: 60px;
   color: #024959;
 }
 
-.text-descripcion{
-  color:#2F3D40;
+.text-descripcion {
+  color: #2F3D40;
 }
 
-.btn-añadir{
+.btn-añadir {
   background-color: #012E40 !important;
   color: white !important;
 }
-.btn-añadir:hover{
-  background-color: #024959  !important;
-}
-.btn-eliminar{
-background-color: red !important;
-color: white !important;
-}
-.btn-eliminar:hover{
-  background-color: rgb(255, 38, 38) !important;
-}
-@media (max-width: 768px) {
-  .card-img-top{
-  min-height: 390px;
-}
+
+.btn-añadir:hover {
+  background-color: #024959 !important;
 }
 
-</style>
+.btn-eliminar {
+  background-color: red !important;
+  color: white !important;
+}
+
+.btn-eliminar:hover {
+  background-color: rgb(255, 38, 38) !important;
+}
+
+@media (max-width: 768px) {
+  .card-img-top {
+    min-height: 390px;
+  }
+}</style>

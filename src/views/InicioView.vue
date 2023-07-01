@@ -10,7 +10,7 @@ import BusquedaPelicula from '@/components/BusquedaPelicula';
 export default {
   name: 'BusquedaView',
   components: {
-    BusquedaPelicula
+    BusquedaPelicula,
 }
 }
 </script>

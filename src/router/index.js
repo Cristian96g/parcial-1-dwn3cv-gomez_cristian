@@ -15,7 +15,7 @@ const routes = [
     name: 'ListaView',
 
     component: () => import('../views/ListaView.vue')
-  }
+  },
 ]
 
 const router = new VueRouter({
