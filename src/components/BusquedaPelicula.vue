@@ -6,10 +6,10 @@
           <h1>Buscá Series y Películas</h1>
           <p>Encuentra tus favoritas y descubre nuevas opciones.</p>
           <v-col justify="center">
-              <v-card-title>
-                <v-text-field append-icon="mdi-magnify" label="Ingresa el nombre aca" single-line hide-details
-                  v-model="textoBusqueda" @keydown.enter="buscar"></v-text-field>
-              </v-card-title>
+            <v-card-title>
+              <v-text-field append-icon="mdi-magnify" label="Ingresa el nombre aca" single-line hide-details
+                v-model="textoBusqueda" @keydown.enter="buscar"></v-text-field>
+            </v-card-title>
           </v-col>
           <v-row justify="center">
             <v-col cols="auto">
@@ -17,9 +17,13 @@
             </v-col>
           </v-row>
         </div>
+        <v-col class="text-center">
+              <v-btn color="btn-buscar" @click="sortResults('populares')">Más populares</v-btn>
+            </v-col>
       </v-col>
-    </v-row>
 
+    </v-row>
+  
     <v-row justify="center">
       <v-col cols="12" sm="6" md="4" lg="3" v-for="pelicula in resultadoBusqueda" :key="pelicula.id">
         <PeliculaCard :pelicula="pelicula" @guardar-pelicula="peliculaGuardada"></PeliculaCard>
@@ -39,6 +43,7 @@ export default {
   data() {
     return {
       textoBusqueda: '',
+      sortBy: '',
     };
   },
   methods: {
@@ -50,10 +55,19 @@ export default {
       if (this.textoBusqueda !== '') {
         this.$store.dispatch('busquedaPelicula', this.textoBusqueda);
 
+        this.sortBy = '';
       } else {
         alert("Ingrese una pelicula o serie");
       }
 
+    },
+    sortResults(option) {
+      this.sortBy = option;
+
+      // Perform the sorting based on the selected option
+      if (option === 'populares') {
+        this.$store.dispatch('ordenarMasPopulares');
+      }
     },
     /**
 * Guarda una película.
@@ -65,6 +79,7 @@ export default {
     },
   },
 
+
   computed: {
     /**
   * Resultados de búsqueda de películas.
@@ -72,7 +87,12 @@ export default {
   * @returns {Array} Array de resultados de búsqueda.
   */
     resultadoBusqueda() {
-      return this.$store.state.resultadoBusqueda;
+      let results = this.$store.state.resultadoBusqueda;
+      if (this.sortBy === 'populares') {
+      results.sort((a, b) => b.popularity - a.popularity);
+    }
+
+    return results;
     },
   },
 };
@@ -96,7 +116,4 @@ h1 {
   border-radius: 0 7px 7px 0;
   cursor: pointer;
 }
-
-
-
 </style>

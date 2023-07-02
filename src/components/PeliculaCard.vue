@@ -85,10 +85,8 @@ export default {
 
 
     poster() {
-      console.log(this.pelicula);
       let imagen = '';
       if (!this.pelicula.poster_path) {
-        console.log(this.pelicula.poster_path);
         imagen = require('@/assets/sin-imagen.png');
       } else {
         imagen = 'https://image.tmdb.org/t/p/original' + this.pelicula.poster_path;
@@ -174,7 +172,6 @@ export default {
         this.$store.dispatch('peliculaGuardada', this.pelicula);
         this.estaGuardada = true;
         this.confirmacion = 'Guardado correctamente';
-        console.log(this.estaGuardada);
 
       } else {
         this.$store.dispatch('eliminarPelicula', this.pelicula.id);

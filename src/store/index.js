@@ -28,6 +28,10 @@ export default new Vuex.Store({
     setResultadoBusqueda(state, resultados) {
       state.resultadoBusqueda = resultados;
     },
+    // Ordena las películas por popularidad
+    masPopulares(state) {
+      state.resultadoBusqueda.sort((a, b) => b.popularity - a.popularity);
+    },
     /**
      * Actualiza las películas guardadas.
      * @method setResultGuardados
@@ -63,6 +67,10 @@ export default new Vuex.Store({
       } catch (error) {
         console.error("Error searching peliculas:", error);
       }
+    },
+    // Ordena las películas por popularidad
+    ordenarMasPopulares({ commit }) {
+      commit('masPopulares');
     },
     /**
      * Guarda una película en la lista de películas guardadas.
